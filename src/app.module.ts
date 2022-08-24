@@ -8,7 +8,9 @@ import { FriendsEntity } from './entity/friends.entity';
 import { FriendsModule } from './friendsModule/friends.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { ChatsModule } from './chats/chats.module';
 import * as path from "path"
+import { ChatsUserEntity } from './entity/chats.entity';
 
 @Module({
   imports: [ScheduleModule.forRoot(), ServeStaticModule.forRoot({
@@ -21,8 +23,8 @@ import * as path from "path"
     database: 'calendar',
     synchronize: true,
     host: "localhost",
-    entities: [UserEntity, FriendsEntity]
-   })],
+    entities: [UserEntity, FriendsEntity, ChatsUserEntity]
+   }), ChatsModule],
   controllers: [AppController],
   providers: [AppService],
 })

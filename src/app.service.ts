@@ -10,6 +10,6 @@ export class AppService {
 
   @Cron('1 * * * * *')
   handleCron() {
-    console.log("Тест крона")
+    console.log("Тест крона in service app")
   }
 }
