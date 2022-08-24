@@ -12,9 +12,11 @@ export class RegistrationServices {
 
 
    async registration(dto): Promise<UserEntity[]> {
-    const candidate: UserEntity[] = await this.userDB.find({where: {
-        login: dto.login
-    }})
+    const candidate: UserEntity[] = await this.userDB.find({where: [
+        {login: dto.login},
+        {email: dto.email}
+    ]
+    })
 
     if(!candidate.length) {
         dto.password = await bcrypt.hash(dto.password, 10)
@@ -22,7 +24,7 @@ export class RegistrationServices {
         const created: UserEntity[] = await this.userDB.save(dto)
         return created
     } else {
-        throw new BadRequestException("Не уникален логин")
+        throw new BadRequestException("Не уникален логин или email")
     }
 
 

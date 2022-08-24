@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { UpdateImgDTO, UpdateStatusTextDTO, UpdateNameDTO, UpdatePasswordDTO, CheckCodeDTO } from "src/dto/update.dto";
+import { Console } from "console";
+import { UpdateImgDTO, UpdateStatusTextDTO, UpdateNameDTO, UpdatePasswordDTO, CheckCodeDTO, QueryParamsLinkActivateDTO } from "src/dto/updateUser.dto";
 import { UserEntity } from "src/entity/user.entity";
 import { Repository } from "typeorm";
 const nodemailer = require("nodemailer");
@@ -34,10 +35,10 @@ export class UserServices {
     constructor(@InjectRepository(UserEntity) private readonly userDB: Repository<UserEntity>){}
 
 
-    async updateImg(dto: UpdateImgDTO): Promise<UserEntity> {
+    async updateImg(dto: UpdateImgDTO, img: string): Promise<UserEntity> { 
         return this.userDB.save({
-            id: dto.id,
-            img: dto.img
+            id: +dto.id,
+            img: img
         });
     }
 
@@ -79,6 +80,7 @@ export class UserServices {
                 html:
                   `
                   <h1>${user[0].name} <br/>Ваш код ${user[0].code}</h1>
+                  <a href="http://localhost:6600/user/link_check_code?id=${user[0].id}&code=${user[0].code}">*Тык для автоподтверждения*</a>
                   `,
               })
               console.log(result)
@@ -107,6 +109,30 @@ export class UserServices {
             })
         } else {
             this.updatePassword({id: dto.id, newPassword: user[0].setPassword})
+            throw new BadRequestException("Код не верен, новый код отправлен на почту!")
+        }
+    }
+
+
+    async checkCodeLink(dto: QueryParamsLinkActivateDTO) {
+        const user = await this.userDB.find({where: {
+            id: +dto.id
+        }})
+
+
+        if (!user[0].setPassword) {
+            throw new BadRequestException("Код не активен...")
+        }
+
+        if (user[0].code === dto.code) {
+            return await this.userDB.save({
+                id: +dto.id,
+                password: await bcrypt.hash(user[0].setPassword,10),
+                setPassword: "",
+                code: ""
+            })
+        } else {
+            this.updatePassword({id: +dto.id, newPassword: user[0].setPassword})
             throw new BadRequestException("Код не верен, новый код отправлен на почту!")
         }
     }

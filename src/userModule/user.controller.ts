@@ -1,19 +1,22 @@
-import { Body, Controller, Get, Put, UsePipes, ValidationPipe } from "@nestjs/common";
-import { CheckCodeDTO, UpdateImgDTO, UpdateNameDTO, UpdatePasswordDTO, UpdateStatusTextDTO } from "src/dto/update.dto";
+import { Body, Controller, Get, Post, Put, Query, Redirect, UploadedFile, UseInterceptors, UsePipes, ValidationPipe,  } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { CheckCodeDTO, QueryParamsLinkActivateDTO, UpdateImgDTO, UpdateNameDTO, UpdatePasswordDTO, UpdateStatusTextDTO } from "src/dto/updateUser.dto";
 import { UserEntity } from "src/entity/user.entity";
 import { UserServices } from "./user.servicves";
-
-
 
 
 @Controller("/user")
 export class UserController {
     constructor(private readonly userServices: UserServices){}
 
-    @Put("/img")
+    @Post("/img")
     @UsePipes(ValidationPipe)
-    updateImg(@Body() body: UpdateImgDTO): Promise<UserEntity> {
-        return this.userServices.updateImg(body)
+    @UseInterceptors(FileInterceptor('img', {
+        dest: "./static"
+    }))
+    updateImg(@Body() body: UpdateImgDTO, @UploadedFile() img: Express.Multer.File): Promise<UserEntity>  {
+        console.log(img)
+        return this.userServices.updateImg(body, img.filename)
     }
 
     @Put("/status_text")
@@ -40,5 +43,13 @@ export class UserController {
     @UsePipes(ValidationPipe)
     checkCode(@Body() body: CheckCodeDTO) {
         return this.userServices.checkCode(body)
+    }
+
+
+    @Get("/link_check_code")
+    @Redirect("www.google.com")
+    @UsePipes(ValidationPipe)
+    checkCodeLink(@Query() q: QueryParamsLinkActivateDTO) {
+        return this.userServices.checkCodeLink(q)
     }
 }
