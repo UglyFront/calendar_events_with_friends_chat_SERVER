@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { UserEntity } from "./user.entity";
 
 
 export enum statusFriends {
@@ -20,4 +21,5 @@ export class FriendsEntity {
 
     @Column({default: statusFriends.SEND})
     status: statusFriends
+
 }

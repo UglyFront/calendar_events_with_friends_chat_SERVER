@@ -11,6 +11,10 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ChatsModule } from './chats/chats.module';
 import * as path from "path"
 import { ChatsUserEntity } from './entity/chats.entity';
+import { EventModule } from './event/event.module';
+import { EventEntity } from './entity/event.entity';
+import { InviteEventEntity } from './entity/inviteEvent.entity';
+import { ChatEventEntity } from './entity/chatsEvent.entity';
 
 @Module({
   imports: [ScheduleModule.forRoot(), ServeStaticModule.forRoot({
@@ -23,8 +27,8 @@ import { ChatsUserEntity } from './entity/chats.entity';
     database: 'calendar',
     synchronize: true,
     host: "localhost",
-    entities: [UserEntity, FriendsEntity, ChatsUserEntity]
-   }), ChatsModule],
+    entities: [UserEntity, FriendsEntity, ChatsUserEntity, EventEntity, InviteEventEntity, ChatEventEntity]
+   }), ChatsModule, EventModule],
   controllers: [AppController],
   providers: [AppService],
 })

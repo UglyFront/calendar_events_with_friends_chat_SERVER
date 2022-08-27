@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Post, Put, Body, UsePipes, ValidationPipe, Delete } from "@nestjs/common";
+import { Controller, Get, Param, Post, Put, Body, UsePipes, ValidationPipe, Delete, Query, Req } from "@nestjs/common";
+import { query } from "express";
 import { FriendsDTO } from "src/dto/friends.dto";
 import { FriendsEntity } from "src/entity/friends.entity";
-import { FriendsServices } from "./friends.services";
+import { FriendsEntityWithUser, FriendsServices } from "./friends.services";
 
 
 
@@ -10,9 +11,15 @@ import { FriendsServices } from "./friends.services";
 export class FriendsController {
     constructor(private readonly friendsServices: FriendsServices) {}
 
-    @Get("/:id")
-    getFriends(@Param() {id}): Promise<Array<FriendsEntity>> {
+    @Get(":id")
+    getFriends(@Param() {id}): Promise<Array<FriendsEntityWithUser>> {        
         return this.friendsServices.getFriends(id)
+    }
+
+    
+    @Get("")
+    searchFriends(@Query() {s}) {
+        return this.friendsServices.searchFriends(s)
     }
 
 
@@ -45,4 +52,5 @@ export class FriendsController {
     acceptFriends(@Body() body: FriendsDTO) {
         return this.friendsServices.acceptFriends(body)
     }
+
 }

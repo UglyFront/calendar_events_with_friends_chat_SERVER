@@ -1,4 +1,6 @@
-import { Column, PrimaryGeneratedColumn, Entity } from "typeorm";
+import { from } from "rxjs";
+import { Column, PrimaryGeneratedColumn, Entity, OneToMany, OneToOne } from "typeorm";
+import { FriendsEntity } from "./friends.entity";
 
 
 export enum statusEnum {
