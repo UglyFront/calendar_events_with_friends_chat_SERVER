@@ -34,7 +34,7 @@ export class eventDTO {
 
     @IsNotEmpty()
     @IsArray()
-    inviteUser: Array<number>
+    inviteUser: Array<any>
 }
 
 

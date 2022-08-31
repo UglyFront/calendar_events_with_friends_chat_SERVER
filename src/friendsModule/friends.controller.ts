@@ -23,15 +23,15 @@ export class FriendsController {
     }
 
 
-    @Get("sender/:id")
-    getISender(@Param() {id}): Promise<Array<FriendsEntity>> {
-        return this.friendsServices.getISender(id)
-    }
+    // @Get("sender/:id")
+    // getISender(@Param() {id}): Promise<Array<FriendsEntity>> {
+    //     return this.friendsServices.getISender(id)
+    // }
 
-    @Get("reciver/:id")
-    getIReciver(@Param() {id}): Promise<Array<FriendsEntity>> {
-        return this.friendsServices.getIReciver(id)
-    }
+    // @Get("reciver/:id")
+    // getIReciver(@Param() {id}): Promise<Array<FriendsEntity>> {
+    //     return this.friendsServices.getIReciver(id)
+    // }
 
 
     @Post()

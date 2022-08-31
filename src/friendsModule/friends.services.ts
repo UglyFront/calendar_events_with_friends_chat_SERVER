@@ -44,15 +44,19 @@ export class FriendsServices {
    async getFriends(id): Promise<Array<FriendsEntityWithUser>> {
     const out: Array<FriendsEntityWithUser>  = []
 
+    // let friendId = await this.friendsDB.find({where: [
+    //         {sender: id, status: statusFriends.ACCEPT},
+    //         {reciver: id, status: statusFriends.ACCEPT}]}) // онли ацепт
+
     let friendId = await this.friendsDB.find({where: [
-            {sender: id, status: statusFriends.ACCEPT},
-            {reciver: id, status: statusFriends.ACCEPT}]})
+        {sender: id},
+         {reciver: id}]})
 
     
     for (let i = 0; i < friendId.length; i++) {
         let obj: any = friendId[i]
 
-        if(obj.reciver === id) {
+        if(obj.reciver == id) {
             obj.friend = await this.getUserForOutByID(obj.sender)
         }
         else {
@@ -63,24 +67,24 @@ export class FriendsServices {
 
     }
 
+    console.log(out)
+
     return out
-    
-
     }
 
 
-    async getIReciver (id) {
-        return await this.friendsDB.find({where: [
-            {reciver: id, status: statusFriends.SEND}
-        ]})
-    }
+    // async getIReciver (id) {
+    //     return await this.friendsDB.find({where: [
+    //         {reciver: id, status: statusFriends.SEND}
+    //     ]})
+    // }
 
 
-    async getISender (id) {
-        return await this.friendsDB.find({where: [
-            {sender: id, status: statusFriends.SEND}
-        ]})
-    }
+    // async getISender (id) {
+    //     return await this.friendsDB.find({where: [
+    //         {sender: id, status: statusFriends.SEND}
+    //     ]})
+    // }
 
 
     async createFriend(dto: FriendsDTO) {
@@ -111,15 +115,19 @@ export class FriendsServices {
             reciver: dto.sender
         }]
     })
+
         return await this.friendsDB.delete(findId[0].id)
     }
 
 
     async acceptFriends(dto: FriendsDTO) {
-        const acceptId = await this.friendsDB.find({where: {
+        const acceptId = await this.friendsDB.find({where: [{
             sender: dto.sender,
             reciver: dto.reciver
-        }})
+        },{
+            sender: dto.reciver,
+            reciver: dto.sender
+        }]})
 
 
         return await this.friendsDB.save({id: acceptId[0].id, status: statusFriends.ACCEPT})

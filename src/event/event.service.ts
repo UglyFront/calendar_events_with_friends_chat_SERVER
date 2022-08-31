@@ -27,7 +27,7 @@ export class EventService {
         ){}
 
 
-//helpers//////////////////////////////////////////////////////////////////Promise<Array<InviteEventEntity>>/////////
+//helpers////////////////////////////////////Promise<Array<InviteEventEntity>>/////////
  async getInvitesUserByEventId(eventId: number) {
     const invitesId = await this.inviteEventDB.find({where: {
         idEvent: eventId
@@ -35,15 +35,11 @@ export class EventService {
 
     const out = []
 
-
     for (let i = 0; i < invitesId.length; i++) {
         let el = invitesId[i]
-
         let obj = await this.getUserForOutByID(el.idUser)
         out.push(obj)
     }
-
-
 
    return out
  }
@@ -77,6 +73,8 @@ export class EventService {
         let event = await this.eventDB.save(body);
         let chat = await this.chatEventDB.save({idEvent: event.id, img: ""})
 
+        console.log(body)
+
        await this.inviteEventDB.save({
             idEvent: event.id,
             idUser: event.ownerId
@@ -85,7 +83,7 @@ export class EventService {
         body.inviteUser.forEach(async el => {
             await this.inviteEventDB.save({
                 idEvent: event.id,
-                idUser: el
+                idUser: el.id //
             })
         })
 
@@ -94,6 +92,10 @@ export class EventService {
     }
 
 
+    async getChatsAllUserEvent(id){
+        console.log(id, "event")
+    }
+
     async getMyEvent(id): Promise<Array<EventOut>> {
         const out: Array<EventOut> = []
 
@@ -101,13 +103,11 @@ export class EventService {
             idUser: id
         }}) // all event when USERID id in INVITES
 
-    
         let events = []
         for (let i = 0; i < eventsId.length; i++) {
             let event = await this.eventDB.find({where: {
                 id: +eventsId[i].idEvent
             }})
-
 
            events.push(event[0])
         }// events user
@@ -119,6 +119,8 @@ export class EventService {
             el.invites = await this.getInvitesUserByEventId(el.id)
             out.push(el)
         }
+
+        console.log(out)
 
         return out
     }

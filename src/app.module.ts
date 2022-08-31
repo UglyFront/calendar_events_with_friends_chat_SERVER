@@ -15,9 +15,11 @@ import { EventModule } from './event/event.module';
 import { EventEntity } from './entity/event.entity';
 import { InviteEventEntity } from './entity/inviteEvent.entity';
 import { ChatEventEntity } from './entity/chatsEvent.entity';
+import { WSServer } from './ws/ws';
+
 
 @Module({
-  imports: [ScheduleModule.forRoot(), ServeStaticModule.forRoot({
+  imports: [WSServer, ScheduleModule.forRoot(), ServeStaticModule.forRoot({
     rootPath: path.resolve(__dirname, "..", 'static'),
   }) ,UserModule, FriendsModule, TypeOrmModule.forRoot({
     type: 'postgres',

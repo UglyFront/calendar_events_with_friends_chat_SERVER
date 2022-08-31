@@ -8,7 +8,11 @@ import { EventOut, EventService } from './event.service';
 export class EventController {
     constructor(private readonly eventService: EventService){}
 
-
+    @Get("/chats_event/:id")
+    getChatsAllUserEvent(@Param() {id}) {
+        return this.eventService.getChatsAllUserEvent(id)
+    }
+    
     @Get("/:id")
     getMyEvent(@Param() {id}): Promise<Array<EventOut>> {
         return this.eventService.getMyEvent(id)
