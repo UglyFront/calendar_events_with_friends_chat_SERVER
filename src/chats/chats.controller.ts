@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Put, Param, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { chatsUserDTO, myChatsDTO } from 'src/dto/chats.dto';
+import { leaveOrAddEventDTO } from 'src/dto/event.dto';
 import { ChatsUserEntity } from 'src/entity/chats.entity';
 import { ChatsService } from './chats.service';
 
@@ -27,5 +28,4 @@ export class ChatsController {
         console.log(id)
         return this.chatsServices.getCurrentChat(id)
     }
-
 }

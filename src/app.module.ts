@@ -16,6 +16,8 @@ import { EventEntity } from './entity/event.entity';
 import { InviteEventEntity } from './entity/inviteEvent.entity';
 import { ChatEventEntity } from './entity/chatsEvent.entity';
 import { WSServer } from './ws/ws';
+import { MessageModule } from './message/message.module';
+import { MessageEntity } from './entity/message.entity';
 
 
 @Module({
@@ -29,8 +31,8 @@ import { WSServer } from './ws/ws';
     database: 'calendar',
     synchronize: true,
     host: "localhost",
-    entities: [UserEntity, FriendsEntity, ChatsUserEntity, EventEntity, InviteEventEntity, ChatEventEntity]
-   }), ChatsModule, EventModule],
+    entities: [UserEntity, MessageEntity, FriendsEntity, ChatsUserEntity, EventEntity, InviteEventEntity, ChatEventEntity]
+   }), ChatsModule, EventModule, MessageModule],
   controllers: [AppController],
   providers: [AppService],
 })

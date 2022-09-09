@@ -12,6 +12,11 @@ export class EventController {
     getChatsAllUserEvent(@Param() {id}) {
         return this.eventService.getChatsAllUserEvent(id)
     }
+
+    @Put("/check_chat")
+    checkEventInUser(@Body() body) {
+        return this.eventService.checkEventInUser(body)
+    }
     
     @Get("/:id")
     getMyEvent(@Param() {id}): Promise<Array<EventOut>> {
@@ -26,11 +31,6 @@ export class EventController {
     }
 
 
-    // @Get("/chats_event/:id")
-    // @UsePipes(ValidationPipe)
-    // getChatsAllUserEvent(@Param() {id}) {
-    //     return this.eventService.getChatsAllUserEvent(id)
-    // }
 
 
     @Delete("/")

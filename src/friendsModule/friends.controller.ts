@@ -1,7 +1,5 @@
 import { Controller, Get, Param, Post, Put, Body, UsePipes, ValidationPipe, Delete, Query, Req } from "@nestjs/common";
-import { query } from "express";
 import { FriendsDTO } from "src/dto/friends.dto";
-import { FriendsEntity } from "src/entity/friends.entity";
 import { FriendsEntityWithUser, FriendsServices } from "./friends.services";
 
 

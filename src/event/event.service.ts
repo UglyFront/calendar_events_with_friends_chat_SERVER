@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { deleteEventDTO, eventDTO, leaveOrAddEventDTO } from 'src/dto/event.dto';
 import { ChatEventEntity } from 'src/entity/chatsEvent.entity';
 import { EventEntity } from 'src/entity/event.entity';
+import { FriendsEntity } from 'src/entity/friends.entity';
 import { InviteEventEntity } from 'src/entity/inviteEvent.entity';
 import { UserEntity } from 'src/entity/user.entity';
 import { UserOutFromOtherUsers } from 'src/friendsModule/friends.services';
@@ -24,6 +25,7 @@ export class EventService {
     @InjectRepository(InviteEventEntity) private readonly inviteEventDB: Repository<InviteEventEntity>,
     @InjectRepository(ChatEventEntity) private readonly chatEventDB: Repository<ChatEventEntity>,
     @InjectRepository(UserEntity) private readonly userDB: Repository<UserEntity>,
+    @InjectRepository(FriendsEntity) private readonly friendsDB: Repository<FriendsEntity>
         ){}
 
 
@@ -140,5 +142,42 @@ export class EventService {
 
     async addEvent(body: leaveOrAddEventDTO) {
         return await this.inviteEventDB.save({idEvent: body.eventId, idUser: body.userId})
+    }
+
+
+
+    async checkEventInUser(body): Promise<boolean> {
+        if (body.friendChatId > 0) {
+            let friends = await this.friendsDB.find({where: [
+                {
+                id: body.friendChatId,
+                reciver: body.userId
+                },
+                {
+                    id: body.friendChatId,
+                    sender: body.userId
+                    }
+            ]})
+
+            if (friends.length >= 1) {
+                return true
+            } else {
+                return false
+            }
+        } 
+        else {
+            let invite = await this.inviteEventDB.find({where: {
+                idEvent: body.eventId,
+                idUser: body.userId
+            }})
+
+    
+            if (invite.length >= 1) {
+                return true
+            } else {
+                return false
+            }
+
+        }
     }
 }

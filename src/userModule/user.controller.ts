@@ -47,7 +47,6 @@ export class UserController {
 
 
     @Get("/link_check_code")
-    @Redirect("www.google.com")
     @UsePipes(ValidationPipe)
     checkCodeLink(@Query() q: QueryParamsLinkActivateDTO) {
         return this.userServices.checkCodeLink(q)
