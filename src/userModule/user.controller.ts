@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put, Query, Redirect, UploadedFile, UseInterceptors, UsePipes, ValidationPipe,  } from "@nestjs/common";
+import { Body,Param, Controller, Get, Post, Put, Query, Redirect, UploadedFile, UseInterceptors, UsePipes, ValidationPipe,  } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { CheckCodeDTO, QueryParamsLinkActivateDTO, UpdateImgDTO, UpdateNameDTO, UpdatePasswordDTO, UpdateStatusTextDTO } from "src/dto/updateUser.dto";
 import { UserEntity } from "src/entity/user.entity";
@@ -50,5 +50,11 @@ export class UserController {
     @UsePipes(ValidationPipe)
     checkCodeLink(@Query() q: QueryParamsLinkActivateDTO) {
         return this.userServices.checkCodeLink(q)
+    }
+
+
+    @Get("/:id/:idUser")
+    getUserInfo(@Param() {id, idUser}) {
+        return this.userServices.getUserInfo(id, idUser)
     }
 }

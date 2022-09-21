@@ -57,4 +57,21 @@ export class MessageServices {
 
         return addMessage
     }
+
+
+    async createFile(body, file) {
+        let addMessage = await this.messageDB.save({
+            audio: "",
+            chatid: body.chatid,
+            sender: body.sender,
+            text: "",
+            time: body.time,
+            src: file,
+            typeFile: body.typeFile
+        })
+
+        console.log(addMessage)
+
+        return addMessage
+    }
 }

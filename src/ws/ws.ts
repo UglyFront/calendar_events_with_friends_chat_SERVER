@@ -1,5 +1,3 @@
-import { userInfo } from "os";
-
 const { WebSocketServer } = require("ws");
 
 
@@ -36,11 +34,16 @@ export class WSServer {
                     if (!ws.id.includes(msg.id)) {
                         ws.id.push(msg.id)
                     }
+                    break;
                 }
 
                 case "msg": {
 
+                
+
+
                     if (msg.user && msg.audio.length == 0) {
+                        // db.query(`UPDATE user_entity SET status = 'Online' WHERE id = ${msg.user.id}`)
                         db.query(`INSERT INTO message_entity(sender, chatid, text, time, audio) VALUES('${msg.user.id}','${msg.chatId}','${msg.text}','${msg.time}','${msg.audio}');`)
                     }
 
@@ -49,6 +52,14 @@ export class WSServer {
                             el.send(JSON.stringify(msg))
                         }
                     })
+                    break;
+                }
+
+
+                case "exit": {
+                   //console.log("exit")
+                    //db.query(`UPDATE user_entity SET status = 'Offilne' WHERE id = ${msg.user.id}`)
+                    break;
                 }
 
                 default: ""

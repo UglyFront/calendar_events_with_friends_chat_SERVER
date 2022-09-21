@@ -21,4 +21,10 @@ export class MessageEntity {
 
     @Column()
     audio: string
+
+    @Column({default: ''})
+    typeFile: string
+
+    @Column({default: ''})
+    src: string
 }

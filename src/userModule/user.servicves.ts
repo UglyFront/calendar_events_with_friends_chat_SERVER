@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Console } from "console";
 import { UpdateImgDTO, UpdateStatusTextDTO, UpdateNameDTO, UpdatePasswordDTO, CheckCodeDTO, QueryParamsLinkActivateDTO } from "src/dto/updateUser.dto";
+import { FriendsEntity } from "src/entity/friends.entity";
 import { UserEntity } from "src/entity/user.entity";
 import { Repository } from "typeorm";
 const nodemailer = require("nodemailer");
@@ -32,7 +33,9 @@ let transporter = nodemailer.createTransport({
 
 @Injectable()
 export class UserServices {
-    constructor(@InjectRepository(UserEntity) private readonly userDB: Repository<UserEntity>){}
+    constructor(
+        @InjectRepository(FriendsEntity) private readonly friendDB: Repository<FriendsEntity>,
+        @InjectRepository(UserEntity) private readonly userDB: Repository<UserEntity>){}
 
 
     async updateImg(dto: UpdateImgDTO, img: string): Promise<UserEntity> { 
@@ -134,6 +137,32 @@ export class UserServices {
         } else {
             this.updatePassword({id: +dto.id, newPassword: user[0].setPassword})
             throw new BadRequestException("Код не верен, новый код отправлен на почту!")
+        }
+    }
+
+
+    async getUserInfo(id, idUser) {
+        const friend = await this.friendDB.find({where: {
+            id: +id
+        }})
+
+        if(friend[0].sender == idUser) {
+            var user = await this.userDB.find({where: {
+                id: friend[0].reciver
+            }})
+        } else if (friend[0].reciver == idUser) {
+            var user = await this.userDB.find({where: {
+                id: friend[0].sender
+            }})
+        }
+
+
+
+        return {
+            id: user[0].id,
+            name: user[0].name,
+            status: user[0].status,
+            img: user[0].img
         }
     }
 }

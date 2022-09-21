@@ -2,6 +2,7 @@ import { Controller, Get, Param, Post, Body, UseInterceptors, UploadedFile } fro
 import { FileInterceptor } from "@nestjs/platform-express";
 import { MessageServices } from "./message.service";
 
+let c = 0
 
 
 
@@ -11,6 +12,8 @@ export class MessageController {
 
     @Get("/:chatId")
     getMessage(@Param() {chatId}) {
+        c += 1
+        console.log(c)
         return this.messageService.getMessageChat(chatId)
     }
 
@@ -23,4 +26,13 @@ export class MessageController {
         console.log(audio)
         return this.messageService.createVoiceMsg(body, audio.filename)
     }
+
+    //dto write
+    @Post("/file")
+    @UseInterceptors(FileInterceptor('file', {
+        dest: "./static"
+    }))
+    fileMsg(@UploadedFile() file: Express.Multer.File, @Body() body) {
+        return this.messageService.createFile(body, file.filename)
+    }   
 }

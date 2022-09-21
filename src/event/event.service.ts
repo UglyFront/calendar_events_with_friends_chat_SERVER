@@ -115,7 +115,7 @@ export class EventService {
         }// events user
 
 
-        for(let i = 0; i < events.length; i++) {
+        for (let i = 0; i < events.length; i++) {
             let el: any = events[i]
             console.log(el)
             el.invites = await this.getInvitesUserByEventId(el.id)
@@ -123,6 +123,19 @@ export class EventService {
         }
 
         console.log(out)
+
+        return out
+    }
+
+
+    async getCurrentEvent(id): Promise<any> {
+        let out: any = await this.eventDB.find({where: {
+            id: id
+        }})
+
+        out = out[0]
+
+        out.invites = await this.getInvitesUserByEventId(out.id)
 
         return out
     }

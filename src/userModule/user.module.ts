@@ -10,7 +10,7 @@ import { UserServices } from "./user.servicves";
 
 
 @Module({
-   imports: [TypeOrmModule.forFeature([UserEntity])],
+   imports: [TypeOrmModule.forFeature([UserEntity, FriendsEntity])],
    controllers: [UserController, RegistrationController],
    providers: [UserServices, RegistrationServices]
 })

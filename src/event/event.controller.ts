@@ -24,6 +24,12 @@ export class EventController {
     }
 
 
+    @Get("/current/:id")
+    getCurrentEvent(@Param() {id}): Promise<any> {
+        return this.eventService.getCurrentEvent(id)
+    }
+
+
     @Post("")
     @UsePipes(ValidationPipe)
     createEvent(@Body() body: eventDTO): Promise<EventEntity> {
