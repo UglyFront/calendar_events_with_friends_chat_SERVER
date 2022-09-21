@@ -18,8 +18,8 @@ export const db = new Pool({
 
 export class WSServer {
     constructor() {
-        const wss = new WebSocketServer({port: 6601}, () => {
-            console.log(`ws start on 6601`)
+        const wss = new WebSocketServer({port: 4444}, () => {
+            console.log(`ws start on 4444`)
         });
 
         wss.on("connection", (ws) => {
