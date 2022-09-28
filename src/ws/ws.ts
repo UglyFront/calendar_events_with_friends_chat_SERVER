@@ -31,9 +31,8 @@ export class WSServer {
 
               switch (msg.type) {
                 case "connection": {
-                    if (!ws.id.includes(msg.id)) {
-                        ws.id.push(msg.id)
-                    }
+                    ws.id = msg.id
+        
                     break;
                 }
 
